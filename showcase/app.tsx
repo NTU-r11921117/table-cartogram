@@ -34,11 +34,13 @@ import {
   // multiplicationTable,
   // correlationAndWithout,
   usaWithLabels,
+  myConfusionMatrix,
 } from './figure-setups';
 
 function App(): JSX.Element {
   const tables = [
-    usaWithLabels(),
+    myConfusionMatrix(),
+    // usaWithLabels(),
     // ...correlationAndWithout(),
     // multiplicationTable()
     // {

@@ -626,3 +626,15 @@ export function CanidateSimilarity(): FigureConfig {
     showAxisLabels: true,
   };
 }
+
+/**
+ * Simplest example confusion matrix
+ */
+export function myConfusionMatrix(): FigureConfig {
+  return {
+    data: EXAMPLES.MY_CONFUSION,
+    stepSize: 5,
+    computeMode: 'iterative',
+    layout: 'gridLayout',
+  };
+}
