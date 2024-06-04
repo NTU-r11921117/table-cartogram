@@ -392,12 +392,12 @@ export function getDiagonal(polygons: any[]) {
     if (sideLength % 1 !== 0) {
       throw new Error("Cartogram is not square, cannot mark diagonal");
     }
-    const disagonal = [];
-    disagonal.push(polygons[0].vertices[0]);
+    const diagonal = [];
+    diagonal.push(polygons[0].vertices[0]);
     for (let i = 0; i < sideLength; i++) {
-      disagonal.push(polygons[i * (sideLength + 1)].vertices[2]);
+      diagonal.push(polygons[i * (sideLength + 1)].vertices[2]);
     }
-    return disagonal;
+    return diagonal;
   } catch (error) {
     console.error(error);
   }
