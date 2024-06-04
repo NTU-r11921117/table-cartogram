@@ -385,3 +385,52 @@ export function fusePolygons(polygons: any[], accessor: Getter) {
     key: row[0],
   }));
 }
+
+export function getDiagonal(polygons: any[]) {
+  try {
+    const sideLength = Math.sqrt(polygons.length);
+    if (sideLength % 1 !== 0) {
+      throw new Error("Cartogram is not square, cannot mark diagonal");
+    }
+    const disagonal = [];
+    disagonal.push(polygons[0].vertices[0]);
+    for (let i = 0; i < sideLength; i++) {
+      disagonal.push(polygons[i * (sideLength + 1)].vertices[2]);
+    }
+    return disagonal;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export function diagonalError(polygons: any[]) {
+  try {
+    const diagonal = getDiagonal(polygons);
+    return diagonal.reduce(
+      (currentError, pt) => {
+        return currentError + (Math.abs(pt.x - pt.y) / (2**0.5));
+      },
+      0,
+    )
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export function diagonalLength(polygons: any[]) {
+  try {
+    const diagonal = getDiagonal(polygons);
+    const totalDistance = (vertices: Pos[]) => { // Specify the type of the 'diagonal' parameter
+      let sum = 0;
+      for (let i = 1; i < vertices.length; i++) {
+        const dx = vertices[i].x - ((i == 1) ? vertices[i-1].x : 0); // Wrap the ternary expression in parentheses
+        const dy = vertices[i].y - ((i == 1) ? vertices[i-1].y : 0); // Wrap the ternary expression in parentheses
+        sum += Math.sqrt(dx * dx + dy * dy);
+      }
+      return sum;
+    };
+    return totalDistance(diagonal);
+  } catch (error) {
+    console.error(error);
+  }
+}
