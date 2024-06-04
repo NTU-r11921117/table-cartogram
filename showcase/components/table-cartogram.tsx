@@ -1,7 +1,7 @@
 import React from 'react';
-import {XYPlot, PolygonSeries, LabelSeries} from 'react-vis';
+import {XYPlot, PolygonSeries, LabelSeries, MarkSeries} from 'react-vis';
 
-import {area, round, geoCenter} from '../../src/utils';
+import {area, round, geoCenter, getDiagonal, diagonalError, diagonalLength} from '../../src/utils';
 
 import {colorCell} from '../colors';
 
@@ -65,6 +65,12 @@ function plot(props: Props, setX?: boolean, xFlip?: boolean, yFlip?: boolean): J
   if (setX || clipToX) {
     XYprops.xDomain = xFlip ? [1, 0] : [0, 1];
   }
+  const markedPoints = getDiagonal(data);
+  const dE = diagonalError(data);
+  console.log(dE)
+  const dL = diagonalLength(data);
+  console.log(dL)
+
   return (
     <XYPlot {...XYprops}>
       {data.map((cell, index) => {
@@ -187,6 +193,10 @@ function plot(props: Props, setX?: boolean, xFlip?: boolean, yFlip?: boolean): J
           })}
         />
       )}
+      <MarkSeries
+        data={markedPoints}
+        color="red"
+      />
     </XYPlot>
   );
 }
