@@ -35,11 +35,13 @@ import {
   // correlationAndWithout,
   usaWithLabels,
   myConfusionMatrix,
+  randomLarge,
 } from './figure-setups';
 
 function App(): JSX.Element {
   const tables = [
-    myConfusionMatrix(),
+    randomLarge(),
+    // myConfusionMatrix(),
     // usaWithLabels(),
     // ...correlationAndWithout(),
     // multiplicationTable()

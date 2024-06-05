@@ -638,3 +638,15 @@ export function myConfusionMatrix(): FigureConfig {
     layout: 'gridLayout',
   };
 }
+
+/**
+ * large random matrix
+ */
+export function randomLarge(): FigureConfig {
+  return {
+    data: EXAMPLES.RANDOM_LARGE,
+    stepSize: 5,
+    computeMode: 'iterative',
+    layout: 'gridLayout',
+  };
+}

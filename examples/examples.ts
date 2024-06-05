@@ -369,6 +369,10 @@ const MY_CONFUSION = [
   [0.7427370062, 0.6943891165, 0.7203751903, 0.6429074659, 0.5859119638, 1],
 ];
 
+const RANDOM_LARGE = Array.from({ length: 20 }, () => 
+  Array.from({ length: 20 }, () => Math.random())
+);
+
 export default {
   BLOCKS,
   SUB_BLOCKS,
@@ -421,4 +425,5 @@ export default {
 
   CANDIDATE_SIM,
   MY_CONFUSION,
+  RANDOM_LARGE
 };
