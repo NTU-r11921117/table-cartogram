@@ -12,6 +12,7 @@ interface Props {
   getLabel?: (x: any) => string;
   height?: number;
   width?: number;
+  showLabel?: boolean;
 }
 
 function computeDomain(data: any): {min: number; max: number} {
@@ -27,7 +28,7 @@ function computeDomain(data: any): {min: number; max: number} {
 }
 
 export default function plot(props: Props): JSX.Element {
-  const {data, fillMode, height = 600, width = 600, getLabel} = props;
+  const {data, fillMode, height = 600, width = 600, getLabel, showLabel} = props;
   const valueDomain = computeDomain(data);
 
   const xScale = scaleLinear()
@@ -48,9 +49,11 @@ export default function plot(props: Props): JSX.Element {
         return (
           <g key={index}>
             <path d={pather(cell.vertices)} fill={color} stroke="#aaa" />
-            <text x={xScale(center.x)} y={yScale(center.y)} fill={l < 0.5 ? 'white' : 'black'}>
-              {getLabel(cell)}
-            </text>
+            {showLabel && (
+              <text x={xScale(center.x)} y={yScale(center.y)} fill={l < 0.5 ? 'white' : 'black'}>
+                {getLabel(cell)}
+              </text>
+            )}
           </g>
         );
       })}

@@ -147,6 +147,7 @@ export default function Playground(): JSX.Element {
     orderPenalty: 1,
     borderPenalty: 1,
     overlapPenalty: 4,
+    showLabel: false,
   } as OptimizationParams);
   const [layout, setLayout] = useState('pickBest' as LayoutType);
   const [data, setData] = useState([
@@ -283,6 +284,11 @@ export default function Playground(): JSX.Element {
                 type: 'number',
                 description: 'How much penalty to assign to overlap between quads.',
               },
+              {
+                paramName: 'showLabel',
+                type: 'switch',
+                description: 'Whether to show the value of cells.',
+              },
             ].map(({paramName, type, description}) => {
               return (
                 <div key={paramName} className="flex space-between">
@@ -352,6 +358,7 @@ export default function Playground(): JSX.Element {
             getLabel={(x): any => x.data}
             height={800}
             width={800}
+            showLabel={optimizationParams.showLabel}
           />
           <button
             onClick={() => {

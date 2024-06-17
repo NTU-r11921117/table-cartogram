@@ -38,6 +38,7 @@ export interface OptimizationParams {
   borderPenalty?: number;
   lineSearchSteps?: number;
   useEvans?: boolean;
+  showLabel?: boolean;
 }
 
 export type Vector = number[];
