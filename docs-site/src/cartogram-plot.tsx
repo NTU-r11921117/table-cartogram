@@ -1,13 +1,14 @@
 import React from 'react';
 
 import {geoCenter} from '../../src/utils';
-
+import {Dimensions} from '../../types';
 import {colorCell} from '../../showcase/colors';
 import {scaleLinear} from 'd3-scale';
 import {line} from 'd3-shape';
 import {hsl} from 'd3-color';
 interface Props {
   data: any[];
+  tableSize: Dimensions;
   fillMode: string;
   getLabel?: (x: any) => string;
   height?: number;
@@ -28,7 +29,7 @@ function computeDomain(data: any): {min: number; max: number} {
 }
 
 export default function plot(props: Props): JSX.Element {
-  const {data, fillMode, height = 600, width = 600, getLabel, showLabel} = props;
+  const {data, fillMode, height = 600, width = 600, getLabel, showLabel, tableSize} = props;
   const valueDomain = computeDomain(data);
 
   const xScale = scaleLinear()
@@ -44,7 +45,7 @@ export default function plot(props: Props): JSX.Element {
     <svg height={height} width={width} xmlns="http://www.w3.org/2000/svg">
       {data.map((cell, index) => {
         const center = geoCenter(cell.vertices);
-        const color = colorCell(cell, index, fillMode, valueDomain);
+        const color = colorCell(cell, index, fillMode, valueDomain, tableSize);
         const {l} = hsl(color);
         return (
           <g key={index}>

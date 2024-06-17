@@ -1,3 +1,4 @@
+import { Dimensions } from '../types';
 import {
   interpolateInferno,
   interpolateReds,
@@ -52,7 +53,7 @@ const clamp = (x: number, lb: number, ub: number): number => Math.max(Math.min(x
 const clampWithDefault = (v: number): number => (isFinite(v) ? clamp(v, 0, 1) : 1);
 
 type Domain = {min: number; max: number};
-type ColorMode = (cell: any, index: number, {min, max}: Domain) => string;
+type ColorMode = (cell: any, index: number, {min, max}: Domain, tableSize: Dimensions) => string;
 
 export const COLOR_MODES: {[x: string]: ColorMode} = {
   valueHeat: (cell, index, {min, max}) => interpolateInferno(1 - (cell.value - min) / (max - min)),
@@ -85,7 +86,13 @@ export const COLOR_MODES: {[x: string]: ColorMode} = {
   none: () => 'rgba(255, 255, 255, 0)',
   periodicColors: (cell, index) => RV_COLORS[(index + 3) % RV_COLORS.length],
   periodicColorsColorBrewer: (cell, index) => COLOR_BREWER_QUAL_10[(index + 3) % COLOR_BREWER_QUAL_10.length],
+  rowEmphasizeFirst: (_, index, __, tableSize) => {
+    if(index < tableSize.width)
+      return `rgb(255, 0, 0)`;
+    else
+      return `rgb(0, 0, 0)`;
+  }
 };
 
-export const colorCell = (cell: any, index: number, fillMode: string, domain: Domain): string =>
-  (COLOR_MODES[fillMode] || COLOR_MODES.node)(cell, index, domain);
+export const colorCell = (cell: any, index: number, fillMode: string, domain: Domain, tableSize: Dimensions): string =>
+  (COLOR_MODES[fillMode] || COLOR_MODES.node)(cell, index, domain, tableSize);

@@ -15,7 +15,7 @@ function nester(child: any, depth: number): JSX.Element {
 export default function Docs(): JSX.Element {
   return (
     <div className="flex-down centered full-width full-height">
-      <div id="header" className="full-width">
+      {/* <div id="header" className="full-width">
         {nester(<h1>table-cartogram.ts</h1>, 5)}
         <div className="flex-down">
           {nester(<h3>Display Tabular Data With Area</h3>, 3)}
@@ -34,8 +34,8 @@ export default function Docs(): JSX.Element {
             )}
           </span>
         </div>
-      </div>
-      <div className="center-widthed docs intro">
+      </div> */}
+      {/* <div className="center-widthed docs intro">
         <p>
           Table cartograms are a type of data visualization that represents tables of data as grid of
           quadrilaterals. They look a lot like if you were a heatmap were area-ed rather than colored. They
@@ -55,7 +55,7 @@ export default function Docs(): JSX.Element {
           Below you will find an interactive playground component that allows you to explore a dynamic version
           of algorithm. Below that you'll find the more traditional documentation for the library.
         </p>
-      </div>
+      </div> */}
       {/* <div className="gallery">
         <img src="assets/zion.png" />
         <a href="https://www.mcnutt.in/cycles-rain-seasons-in-size/">
@@ -68,10 +68,10 @@ export default function Docs(): JSX.Element {
       </div>
       <PlayGround />
       <div id="gallery"></div>
-      <div id="docs" className="center-widthed docs">
+      {/* <div id="docs" className="center-widthed docs">
         <h1>Docs</h1>
         <ReactMarkdown source={content} />
-      </div>
+      </div> */}
     </div>
   );
 }

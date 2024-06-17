@@ -425,5 +425,5 @@ export default {
 
   CANDIDATE_SIM,
   MY_CONFUSION,
-  RANDOM_LARGE
+  RANDOM_LARGE,
 };

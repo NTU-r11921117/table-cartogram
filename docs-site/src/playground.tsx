@@ -354,6 +354,7 @@ export default function Playground(): JSX.Element {
           {!gons.length && <h1>Press start to run</h1>}
           <CartogramPlot
             data={gons}
+            tableSize={{height: data.length, width: data[0].length}}
             fillMode={fillMode}
             getLabel={(x): any => x.data}
             height={800}
