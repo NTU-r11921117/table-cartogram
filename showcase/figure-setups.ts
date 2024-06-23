@@ -645,7 +645,7 @@ export function myConfusionMatrix(): FigureConfig {
 export function randomLarge(): FigureConfig {
   return {
     data: EXAMPLES.RANDOM_LARGE,
-    stepSize: 5,
+    stepSize: 20,
     computeMode: 'iterative',
     layout: 'gridLayout',
   };

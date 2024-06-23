@@ -88,9 +88,9 @@ export const COLOR_MODES: {[x: string]: ColorMode} = {
   periodicColorsColorBrewer: (cell, index) => COLOR_BREWER_QUAL_10[(index + 3) % COLOR_BREWER_QUAL_10.length],
   rowEmphasizeFirst: (_, index, __, tableSize) => {
     if(index < tableSize.width)
-      return `rgb(255, 0, 0)`;
+      return `rgb(255, 100, 100)`;
     else
-      return `rgb(0, 0, 0)`;
+      return `rgb(100, 100, 100)`;
   }
 };
 

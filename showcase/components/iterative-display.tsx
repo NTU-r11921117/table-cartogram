@@ -72,7 +72,7 @@ export default class IterativeDisplay extends React.Component<Props, State> {
     stepsTaken: 0,
     previousValueAndCount: {count: 0, value: null as any},
     maxError: NaN,
-    fillMode: 'errorHeat',
+    fillMode: 'rowEmphasizeFirst',
     showLabels: false,
     runningMode: 'running' as RunningMode,
   };
