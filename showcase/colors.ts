@@ -87,12 +87,20 @@ export const COLOR_MODES: {[x: string]: ColorMode} = {
   periodicColors: (cell, index) => RV_COLORS[(index + 3) % RV_COLORS.length],
   periodicColorsColorBrewer: (cell, index) => COLOR_BREWER_QUAL_10[(index + 3) % COLOR_BREWER_QUAL_10.length],
   rowEmphasizeFirst: (_, index, __, tableSize) => {
-    if(index < tableSize.width)
-      return `rgb(255, 100, 100)`;
-    else
-      return `rgb(100, 100, 100)`;
+    return rowEmphasize(1, index, tableSize);
+  },
+  rowEmphasizeFourth: (_, index, __, tableSize) => {
+    return rowEmphasize(4, index, tableSize);
   }
 };
+
+const rowEmphasize = (entry: number, index: number, tableSize: Dimensions) => {
+  entry = clamp(entry, 1, tableSize.height);
+  if(index < tableSize.width * entry && index >= tableSize.width * (entry - 1))
+    return `rgb(255, 100, 100)`;
+  else
+    return `rgb(100, 100, 100)`;
+}
 
 export const colorCell = (cell: any, index: number, fillMode: string, domain: Domain, tableSize: Dimensions): string =>
   (COLOR_MODES[fillMode] || COLOR_MODES.node)(cell, index, domain, tableSize);

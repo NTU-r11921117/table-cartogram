@@ -126,11 +126,27 @@ const NICE_CONFUSION = [
   [0.04, 0.03, 0.02, 0.01, 0.08, 1],
 ];
 
+const BIG_SECOND_ROW = [
+  [13, 2, 4, 4, 4, 10, 2, 11],
+  [3, 8, 4, 10, 11, 12, 16, 9],
+  [20, 22, 23, 42, 22, 31, 21, 41],
+  [10, 13, 15, 12, 10, 5, 11, 15],
+  [1, 2, 10, 4, 4, 5, 2, 1],
+  [4, 1, 5, 11, 1, 5, 1, 1],
+  [1, 3, 2, 2, 12, 1, 6, 7],
+  [9, 1, 1, 3, 5, 1, 3, 9],
+];
+
 const RANDOM_LARGE = Array.from({ length: 20 }, () => 
   Array.from({ length: 20 }, () => Math.random())
 );
 
 const examples: {[x: string]: number[][]} = {
+  MY_CONFUSION,
+  RANDOM_LARGE,
+  NICE_CONFUSION,
+  BIG_SECOND_ROW,
+
   BLOCKS,
   SUB_BLOCKS,
   BIG_ONES,
@@ -164,9 +180,5 @@ const examples: {[x: string]: number[][]} = {
   POWER_1: applyPower(POWER_ARRANGEMENTS[0]),
   POWER_2: applyPower(POWER_ARRANGEMENTS[1]),
   POWER_3: applyPower(POWER_ARRANGEMENTS[2]),
-  
-  MY_CONFUSION,
-  RANDOM_LARGE,
-  NICE_CONFUSION,
 };
 export default examples;
