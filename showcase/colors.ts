@@ -53,6 +53,7 @@ const clamp = (x: number, lb: number, ub: number): number => Math.max(Math.min(x
 const clampWithDefault = (v: number): number => (isFinite(v) ? clamp(v, 0, 1) : 1);
 
 type Domain = {min: number; max: number};
+type Pair = [number, number];
 type ColorMode = (cell: any, index: number, {min, max}: Domain, tableSize: Dimensions) => string;
 
 export const COLOR_MODES: {[x: string]: ColorMode} = {
@@ -87,16 +88,20 @@ export const COLOR_MODES: {[x: string]: ColorMode} = {
   periodicColors: (cell, index) => RV_COLORS[(index + 3) % RV_COLORS.length],
   periodicColorsColorBrewer: (cell, index) => COLOR_BREWER_QUAL_10[(index + 3) % COLOR_BREWER_QUAL_10.length],
   rowEmphasizeFirst: (_, index, __, tableSize) => {
-    return rowEmphasize(1, index, tableSize);
+    return rowEmphasize([1, 1], index, tableSize);
   },
   rowEmphasizeFourth: (_, index, __, tableSize) => {
-    return rowEmphasize(4, index, tableSize);
-  }
+    return rowEmphasize([4, 4], index, tableSize);
+  },
+  rowEmphasizeFourthFifth: (_, index, __, tableSize) => {
+    return rowEmphasize([4, 5], index, tableSize);
+  },
 };
 
-const rowEmphasize = (entry: number, index: number, tableSize: Dimensions) => {
-  entry = clamp(entry, 1, tableSize.height);
-  if(index < tableSize.width * entry && index >= tableSize.width * (entry - 1))
+const rowEmphasize = (entry: Pair, index: number, tableSize: Dimensions) => {
+  entry[0] = clamp(entry[0], 1, tableSize.height);
+  entry[1] = clamp(entry[1], 1, tableSize.height);
+  if(index < tableSize.width * entry[1] && index >= tableSize.width * (entry[0] - 1))
     return `rgb(255, 100, 100)`;
   else
     return `rgb(100, 100, 100)`;
