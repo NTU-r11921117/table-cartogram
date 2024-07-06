@@ -146,7 +146,7 @@ const BIG_SECOND_ROW = [
   [9, 1, 1, 3, 5, 1, 3, 9],
 ];
 
-const BIG_SECOND_ROW_SPLIT_FOURTH = rowSplit(BIG_SECOND_ROW, 4, 0.5);
+const BIG_SECOND_ROW_SPLIT_FOURTH = rowSplit([...BIG_SECOND_ROW], 4, 0.5);
 
 const RANDOM_LARGE = Array.from({ length: 20 }, () => 
   Array.from({ length: 20 }, () => Math.random())
