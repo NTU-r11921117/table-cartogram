@@ -1,4 +1,4 @@
-import { Dimensions } from '../types';
+import { Dimensions, Pair } from '../types';
 import {
   interpolateInferno,
   interpolateReds,
@@ -53,8 +53,7 @@ const clamp = (x: number, lb: number, ub: number): number => Math.max(Math.min(x
 const clampWithDefault = (v: number): number => (isFinite(v) ? clamp(v, 0, 1) : 1);
 
 type Domain = {min: number; max: number};
-type Pair = [number, number];
-type ColorMode = (cell: any, index: number, {min, max}: Domain, tableSize: Dimensions) => string;
+type ColorMode = (cell: any, index: number, {min, max}: Domain, tableSize: Dimensions, emphasizedRows: Pair) => string;
 
 export const COLOR_MODES: {[x: string]: ColorMode} = {
   valueHeat: (cell, index, {min, max}) => interpolateInferno(1 - (cell.value - min) / (max - min)),
@@ -87,15 +86,9 @@ export const COLOR_MODES: {[x: string]: ColorMode} = {
   none: () => 'rgba(255, 255, 255, 0)',
   periodicColors: (cell, index) => RV_COLORS[(index + 3) % RV_COLORS.length],
   periodicColorsColorBrewer: (cell, index) => COLOR_BREWER_QUAL_10[(index + 3) % COLOR_BREWER_QUAL_10.length],
-  rowEmphasizeFirst: (_, index, __, tableSize) => {
-    return rowEmphasize([1, 1], index, tableSize);
-  },
-  rowEmphasizeFourth: (_, index, __, tableSize) => {
-    return rowEmphasize([4, 4], index, tableSize);
-  },
-  rowEmphasizeFourthFifth: (_, index, __, tableSize) => {
-    return rowEmphasize([4, 5], index, tableSize);
-  },
+  rowEmphasize: (_, index, __, tableSize, emphasizedRows) => {
+    return rowEmphasize(emphasizedRows, index, tableSize);
+  }
 };
 
 const rowEmphasize = (entry: Pair, index: number, tableSize: Dimensions) => {
@@ -107,5 +100,5 @@ const rowEmphasize = (entry: Pair, index: number, tableSize: Dimensions) => {
     return `rgb(100, 100, 100)`;
 }
 
-export const colorCell = (cell: any, index: number, fillMode: string, domain: Domain, tableSize: Dimensions): string =>
-  (COLOR_MODES[fillMode] || COLOR_MODES.node)(cell, index, domain, tableSize);
+export const colorCell = (cell: any, index: number, fillMode: string, domain: Domain, tableSize: Dimensions, emphasizedRows: Pair): string =>
+  (COLOR_MODES[fillMode] || COLOR_MODES.node)(cell, index, domain, tableSize, emphasizedRows);

@@ -41,6 +41,13 @@ export interface OptimizationParams {
   showLabel?: boolean;
 }
 
+export interface LayoutParams {
+  emphasizedRowsFrom?: number,
+  emphasizedRowsTo?: number,
+  showLabel?: boolean,
+}
+
+export type Pair = [number, number];
 export type Vector = number[];
 export type DataTable = number[][];
 export type Pos = {x: number; y: number};

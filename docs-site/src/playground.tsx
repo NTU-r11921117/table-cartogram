@@ -4,7 +4,7 @@ import Tooltip from 'rc-tooltip';
 import CartogramPlot from './cartogram-plot';
 import {tableCartogramWithUpdate} from '../..';
 import {area, computeErrors} from '../../src/utils';
-import {Gon, Getter, LayoutType, Dimensions, OptimizationParams, DataTable} from '../../types';
+import {Gon, Getter, LayoutType, Dimensions, LayoutParams, OptimizationParams, DataTable} from '../../types';
 import {layouts} from '../../src/layouts';
 import {XYPlot, LineSeries, XAxis, YAxis, DiscreteColorLegend} from 'react-vis';
 import EXAMPLES from './examples';
@@ -178,6 +178,11 @@ export default function Playground(): JSX.Element {
     overlapPenalty: 4,
     showLabel: false,
   } as OptimizationParams);
+  const [layoutParams, setLayoutParams] = useState({
+    emphasizedRowsFrom: 0,
+    emphasizedRowsTo: 0,
+    showLabel: false,
+  } as LayoutParams); 
   const [layout, setLayout] = useState('pickBest' as LayoutType);
   const [data, setData] = useState([
     [1, 10, 1],
@@ -261,16 +266,80 @@ export default function Playground(): JSX.Element {
           <h5>PARAM SELECTION</h5>
           <div className="flex-down">
             <DropDownWithLabel
-              label={'Color Scheme'}
-              keys={Object.keys(COLOR_MODES)}
-              onChange={setFillMode}
-            />
-            <DropDownWithLabel
               label={'Initial Layout'}
               keys={['pickBest', 'pickWorst', ...Object.keys(layouts)]}
               onChange={val => triggerReRun(setLayout(val as any))}
               current={layout}
             />
+            <DropDownWithLabel
+              label={'Color Scheme'}
+              keys={Object.keys(COLOR_MODES)}
+              onChange={setFillMode}
+            />
+            {[
+              {
+                paramName: 'emphasizedRowsFrom',
+                type: 'number',
+                description: 'The range of rows to emphasize in the layout.',
+              },
+              {
+                paramName: 'emphasizedRowsTo',
+                type: 'number',
+                description: 'The range of rows to emphasize in the layout.',
+              },
+              {
+                paramName: 'showLabel',
+                type: 'switch',
+                description: 'Whether to show the value of cells.',
+              },
+            ].map(({paramName, type, description}) => {
+              return (
+                <div key={paramName} className="flex space-between">
+                  <div>
+                    <span>{paramName}</span>
+                    <Tooltip
+                      key={type}
+                      placement="bottom"
+                      trigger="click"
+                      overlay={<span className="tooltip-internal">{<span>{description}</span>}</span>}
+                    >
+                      <span className="cursor-pointer">(?)</span>
+                    </Tooltip>
+                  </div>
+                  {type === 'switch' && (
+                    <Switch
+                      {...{
+                        offColor: '#800000',
+                        onColor: '#36425C',
+                        height: 15,
+                        checkedIcon: false,
+                        width: 50,
+                      }}
+                      checked={(layoutParams as any)[paramName]}
+                      onChange={() =>
+                        setLayoutParams({
+                          ...layoutParams,
+                          [paramName]: !(layoutParams as any)[paramName],
+                        })
+                      }
+                    />
+                  )}
+                  {type === 'number' && (
+                    <input
+                      key={paramName}
+                      type="number"
+                      value={(layoutParams as any)[paramName]}
+                      onChange={(event: any): any =>
+                        setLayoutParams({
+                          ...layoutParams,
+                          [paramName]: event.target.value,
+                        })
+                      }
+                    />
+                  )}
+                </div>
+              );
+            })}
             {[
               {
                 paramName: 'lineSearchSteps',
@@ -312,11 +381,6 @@ export default function Playground(): JSX.Element {
                 paramName: 'overlapPenalty',
                 type: 'number',
                 description: 'How much penalty to assign to overlap between quads.',
-              },
-              {
-                paramName: 'showLabel',
-                type: 'switch',
-                description: 'Whether to show the value of cells.',
               },
             ].map(({paramName, type, description}) => {
               return (
@@ -388,7 +452,8 @@ export default function Playground(): JSX.Element {
             getLabel={(x): any => x.data}
             height={800}
             width={800}
-            showLabel={optimizationParams.showLabel}
+            showLabel={layoutParams.showLabel}
+            emphasizedRows={[layoutParams.emphasizedRowsFrom, layoutParams.emphasizedRowsTo]}
           />
           <button
             onClick={() => {
