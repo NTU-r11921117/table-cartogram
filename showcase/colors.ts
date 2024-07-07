@@ -92,9 +92,7 @@ export const COLOR_MODES: {[x: string]: ColorMode} = {
 };
 
 const rowEmphasize = (entry: Pair, index: number, tableSize: Dimensions) => {
-  entry[0] = clamp(entry[0], 1, tableSize.height);
-  entry[1] = clamp(entry[1], 1, tableSize.height);
-  if(index < tableSize.width * entry[1] && index >= tableSize.width * (entry[0] - 1))
+  if(index < tableSize.width * entry[1] && index >= tableSize.width * (entry[0] - 1) && entry[0] <= entry[1])
     return `rgb(255, 100, 100)`;
   else
     return `rgb(100, 100, 100)`;
