@@ -4,10 +4,10 @@ import Tooltip from 'rc-tooltip';
 import CartogramPlot from './cartogram-plot';
 import {tableCartogramWithUpdate} from '../..';
 import {area, computeErrors} from '../../src/utils';
-import {Gon, Getter, LayoutType, Dimensions, LayoutParams, OptimizationParams, DataTable} from '../../types';
+import {Gon, Getter, LayoutType, Dimensions, SplitParams, LayoutParams, OptimizationParams, DataTable} from '../../types';
 import {layouts} from '../../src/layouts';
 import {XYPlot, LineSeries, XAxis, YAxis, DiscreteColorLegend} from 'react-vis';
-import EXAMPLES from './examples';
+import EXAMPLES, { rowSplit } from './examples';
 
 type RunningMode = 'running' | 'finished' | 'converged' | 'stopped' | 'errored';
 import {COLOR_MODES} from '../../showcase/colors';
@@ -165,7 +165,7 @@ function DisplayReadout(props: DisplayReadoutProps): JSX.Element {
 export default function Playground(): JSX.Element {
   const accessor = (x: number): number => x;
   const dims = {height: 1, width: 1};
-  const [gons, setGons] = useState([]);
+  const [gons, setGons] = useState<any[]>([]);
   const stepSize = 10;
   const [optimizationParams, setOptimizationParams] = useState({
     lineSearchSteps: 30,
@@ -176,7 +176,6 @@ export default function Playground(): JSX.Element {
     orderPenalty: 1,
     borderPenalty: 1,
     overlapPenalty: 4,
-    showLabel: false,
   } as OptimizationParams);
   const [layoutParams, setLayoutParams] = useState({
     emphasizedRowsFrom: 0,
@@ -189,6 +188,10 @@ export default function Playground(): JSX.Element {
     [1, 1, 1],
     [1, 10, 1],
   ]);
+  const [splitParams, setSplitParams] = useState({
+    splitRow: 0,
+    splitRatio: 0.5,
+  } as SplitParams);
   const [fillMode, setFillMode] = useState('errorHeat');
   const [runningMode, setRunningMode] = useState('stopped' as RunningMode);
   const [{startTime, endTime, error, maxError, stepsTaken, errorLog}, setScalars] = useState({
@@ -262,7 +265,23 @@ export default function Playground(): JSX.Element {
           <Tooltip trigger="click" overlay={DataUploader(setData, data, triggerReRun)}>
             <button>Customize Data</button>
           </Tooltip>
-
+          <div className="flex">
+            <input
+              type="number"
+              value={splitParams.splitRow}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+                setSplitParams({ ...splitParams, splitRow: parseInt(e.target.value) })
+              }
+            />
+            <input
+              type="number"
+              value={splitParams.splitRatio}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+                setSplitParams({ ...splitParams, splitRatio: parseFloat(e.target.value) })
+              }
+            />
+            <button onClick={(): any => triggerReRun(setData(rowSplit(data, splitParams.splitRow, splitParams.splitRatio)))}>Split</button>
+          </div>
           <h5>PARAM SELECTION</h5>
           <div className="flex-down">
             <DropDownWithLabel

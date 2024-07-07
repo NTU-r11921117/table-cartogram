@@ -1,4 +1,4 @@
-const rowSplit = (matrix: number[][], row: number, ratio: number) => {
+export const rowSplit = (matrix: number[][], row: number, ratio: number) => {
   row = row - 1;
   row = Math.max(Math.min(row, matrix.length), 0);
   const newRow1 = matrix[row].map(d => d * ratio);
@@ -154,7 +154,7 @@ const RANDOM_LARGE = Array.from({ length: 20 }, () =>
 
 const examples: {[x: string]: number[][]} = {
   MY_CONFUSION,
-  RANDOM_LARGE,
+  // RANDOM_LARGE,
   NICE_CONFUSION,
   BIG_SECOND_ROW,
   BIG_SECOND_ROW_SPLIT_FOURTH,

@@ -47,6 +47,11 @@ export interface LayoutParams {
   showLabel?: boolean,
 }
 
+export interface SplitParams {
+  splitRow?: number;
+  splitRatio?: number;
+}
+
 export type Pair = [number, number];
 export type Vector = number[];
 export type DataTable = number[][];
