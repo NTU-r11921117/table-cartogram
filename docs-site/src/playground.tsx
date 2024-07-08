@@ -146,7 +146,7 @@ function DisplayReadout(props: DisplayReadoutProps): JSX.Element {
         {`Steps taken ${stepsTaken}`} <br />
         {`Avg Error ${Math.floor(error * Math.pow(10, 7)) / Math.pow(10, 5)} %`} <br />
         {`Max Error ${Math.floor(maxError * Math.pow(10, 7)) / Math.pow(10, 5)} %`} <br />
-        {`Computation Time ${(endTime - startTime) / 1000} seconds`} <br />
+        {endTime && startTime && `Computation Time ${(endTime - startTime) / 1000} seconds`} <br />
       </div>
 
       {errorLog.length > 0 && (
@@ -194,7 +194,15 @@ export default function Playground(): JSX.Element {
   } as SplitParams);
   const [fillMode, setFillMode] = useState('errorHeat');
   const [runningMode, setRunningMode] = useState('stopped' as RunningMode);
-  const [{startTime, endTime, error, maxError, stepsTaken, errorLog}, setScalars] = useState({
+  const [{startTime, endTime, error, maxError, stepsTaken, errorLog}, setScalars] = useState<{
+    startTime: number;
+    endTime: number;
+    error: number;
+    maxError: number;
+    stepsTaken: number;
+    errorLog: any[];
+    errorStep: null;
+  }>({
     startTime: new Date().getTime(),
     endTime: new Date().getTime(),
     error: 0,
@@ -476,11 +484,12 @@ export default function Playground(): JSX.Element {
             height={800}
             width={800}
             showLabel={layoutParams.showLabel}
-            emphasizedRows={[layoutParams.emphasizedRowsFrom, layoutParams.emphasizedRowsTo]}
+            emphasizedRows={[layoutParams.emphasizedRowsFrom ?? 0, layoutParams.emphasizedRowsTo ?? 0]}
           />
           <button
             onClick={() => {
-              const svg = document.querySelector('.plot-container svg').outerHTML;
+              const svgElement = document.querySelector('.plot-container svg') as SVGSVGElement;
+              const svg = svgElement.outerHTML;
               const blob = new Blob([svg.toString()]);
               const element = document.createElement('a');
               element.download = `table-cartogram-${new Date()}.svg`;

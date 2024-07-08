@@ -1,4 +1,7 @@
-export const rowSplit = (matrix: number[][], row: number, ratio: number) => {
+export const rowSplit = (matrix: number[][], row: number | undefined, ratio: number | undefined) => {
+  if (row === undefined || ratio === undefined) {
+    return matrix;
+  }
   const matrixCopy = matrix.map(row => [...row]);
   row = row - 1;
   row = Math.max(Math.min(row, matrixCopy.length), 0);
@@ -147,7 +150,7 @@ const BIG_SECOND_ROW = [
   [9, 1, 1, 3, 5, 1, 3, 9],
 ];
 
-const BIG_SECOND_ROW_SPLIT_FOURTH = rowSplit([...BIG_SECOND_ROW], 4, 0.5);
+// const BIG_SECOND_ROW_SPLIT_FOURTH = rowSplit([...BIG_SECOND_ROW], 4, 0.5);
 
 const RANDOM_LARGE = Array.from({ length: 20 }, () => 
   Array.from({ length: 20 }, () => Math.random())
@@ -158,7 +161,7 @@ const examples: {[x: string]: number[][]} = {
   // RANDOM_LARGE,
   NICE_CONFUSION,
   BIG_SECOND_ROW,
-  BIG_SECOND_ROW_SPLIT_FOURTH,
+  // BIG_SECOND_ROW_SPLIT_FOURTH,
 
   BLOCKS,
   SUB_BLOCKS,
