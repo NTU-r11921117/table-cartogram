@@ -1,10 +1,11 @@
 export const rowSplit = (matrix: number[][], row: number, ratio: number) => {
+  const matrixCopy = matrix.map(row => [...row]);
   row = row - 1;
-  row = Math.max(Math.min(row, matrix.length), 0);
-  const newRow1 = matrix[row].map(d => d * ratio);
-  const newRow2 = matrix[row].map(d => d * (1 - ratio));
-  matrix.splice(row, 1, newRow1, newRow2);
-  return matrix;
+  row = Math.max(Math.min(row, matrixCopy.length), 0);
+  const newRow1 = matrixCopy[row].map(d => d * ratio);
+  const newRow2 = matrixCopy[row].map(d => d * (1 - ratio));
+  matrixCopy.splice(row, 1, newRow1, newRow2);
+  return matrixCopy;
 }
 
 const POWER_ARRANGEMENTS = [

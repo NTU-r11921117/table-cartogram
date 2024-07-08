@@ -265,7 +265,8 @@ export default function Playground(): JSX.Element {
           <Tooltip trigger="click" overlay={DataUploader(setData, data, triggerReRun)}>
             <button>Customize Data</button>
           </Tooltip>
-          <div className="flex">
+          <div className="flex space-between">
+            <text>splitRow</text>
             <input
               type="number"
               value={splitParams.splitRow}
@@ -273,6 +274,9 @@ export default function Playground(): JSX.Element {
                 setSplitParams({ ...splitParams, splitRow: parseInt(e.target.value) })
               }
             />
+          </div>
+          <div className="flex space-between">
+            <text>splitRatio</text>
             <input
               type="number"
               value={splitParams.splitRatio}
@@ -280,8 +284,8 @@ export default function Playground(): JSX.Element {
                 setSplitParams({ ...splitParams, splitRatio: parseFloat(e.target.value) })
               }
             />
-            <button onClick={(): any => triggerReRun(setData(rowSplit(data, splitParams.splitRow, splitParams.splitRatio)))}>Split</button>
           </div>
+          <button onClick={(): any => triggerReRun(setData(rowSplit(data, splitParams.splitRow, splitParams.splitRatio)))}>Split</button>
           <h5>PARAM SELECTION</h5>
           <div className="flex-down">
             <DropDownWithLabel
