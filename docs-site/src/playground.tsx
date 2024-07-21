@@ -363,7 +363,7 @@ export default function Playground(): JSX.Element {
                       onChange={(event: any): any =>
                         setLayoutParams({
                           ...layoutParams,
-                          [paramName]: event.target.value,
+                          [paramName]: parseInt(event.target.value), // Only for integers
                         })
                       }
                     />
