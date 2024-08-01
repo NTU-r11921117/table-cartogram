@@ -11,6 +11,18 @@ export const rowSplit = (matrix: number[][], row: number | undefined, ratio: num
   return matrixCopy;
 }
 
+const applyRowSplits = (row: number, times: number, matrix: number[][]): number[][] => {
+  let result: number[][] = matrix;
+  let batch = 1;
+  for (let i = 0; i < times; i++) {
+    for (let j = batch; j; j--) {
+      result = rowSplit(result, row + j - 1, 0.5);
+    }
+    batch *= 2;
+  }
+  return result;
+}
+
 const POWER_ARRANGEMENTS = [
   [
     [0, 1],
@@ -139,7 +151,7 @@ const NICE_CONFUSION = [
   [0.04, 0.03, 0.02, 0.01, 0.08, 1],
 ];
 
-const BIG_SECOND_ROW = [
+const BASIC_CASE = [
   [13, 2, 4, 4, 4, 10, 2, 11],
   [3, 8, 4, 10, 11, 12, 16, 9],
   [20, 22, 23, 42, 22, 31, 21, 41],
@@ -150,18 +162,30 @@ const BIG_SECOND_ROW = [
   [9, 1, 1, 3, 5, 1, 3, 9],
 ];
 
-// const BIG_SECOND_ROW_SPLIT_FOURTH = rowSplit([...BIG_SECOND_ROW], 4, 0.5);
+const IMBALENCED_CASE = [
+  [13, 2, 4, 4, 4, 10, 2, 11],
+  [3, 8, 4, 10, 11, 12, 16, 9],
+  [10, 22, 13, 22, 29, 31, 30, 41],
+  [30, 26, 24, 20, 10, 10, 4, 6],
+  [1, 2, 10, 4, 4, 5, 2, 1],
+  [4, 1, 5, 11, 1, 5, 1, 1],
+  [1, 3, 2, 2, 12, 1, 6, 7],
+  [9, 1, 1, 3, 5, 1, 3, 9],
+];
 
 const RANDOM_LARGE = Array.from({ length: 20 }, () => 
   Array.from({ length: 20 }, () => Math.random())
 );
 
+const SPLIT_IMBALANCED = applyRowSplits(4, 5, IMBALENCED_CASE);
+
 const examples: {[x: string]: number[][]} = {
   MY_CONFUSION,
   // RANDOM_LARGE,
   NICE_CONFUSION,
-  BIG_SECOND_ROW,
-  // BIG_SECOND_ROW_SPLIT_FOURTH,
+  BASIC_CASE,
+  IMBALENCED_CASE,
+  SPLIT_IMBALANCED,
 
   BLOCKS,
   SUB_BLOCKS,
