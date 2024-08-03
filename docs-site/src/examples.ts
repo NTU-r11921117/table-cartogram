@@ -11,12 +11,38 @@ export const rowSplit = (matrix: number[][], row: number | undefined, ratio: num
   return matrixCopy;
 }
 
+export const columnSplit = (matrix: number[][], column: number | undefined, ratio: number | undefined) => {
+  if (column === undefined || ratio === undefined) {
+    return matrix;
+  }
+  const matrixCopy = matrix.map(row => [...row]);
+  column = column - 1;
+  column = Math.max(Math.min(column, matrixCopy[0].length), 0);
+  for (let i = 0; i < matrixCopy.length; i++) {
+    const val = matrixCopy[i][column];
+    matrixCopy[i].splice(column, 1, val * ratio, val * (1 - ratio));
+  }
+  return matrixCopy;
+}
+
 const applyRowSplits = (row: number, times: number, matrix: number[][]): number[][] => {
   let result: number[][] = matrix;
   let batch = 1;
   for (let i = 0; i < times; i++) {
     for (let j = batch; j; j--) {
       result = rowSplit(result, row + j - 1, 0.5);
+    }
+    batch *= 2;
+  }
+  return result;
+}
+
+const applyColumnSplits = (column: number, times: number, matrix: number[][]): number[][] => {
+  let result: number[][] = matrix;
+  let batch = 1;
+  for (let i = 0; i < times; i++) {
+    for (let j = batch; j; j--) {
+      result = columnSplit(result, column + j - 1, 0.5);
     }
     batch *= 2;
   }
@@ -178,6 +204,7 @@ const RANDOM_LARGE = Array.from({ length: 20 }, () =>
 );
 
 const SPLIT_IMBALANCED = applyRowSplits(4, 5, IMBALENCED_CASE);
+const COLUMN_SPLIT_IMBALANCED = applyColumnSplits(4, 1, IMBALENCED_CASE);
 
 const examples: {[x: string]: number[][]} = {
   MY_CONFUSION,
@@ -186,6 +213,7 @@ const examples: {[x: string]: number[][]} = {
   BASIC_CASE,
   IMBALENCED_CASE,
   SPLIT_IMBALANCED,
+  COLUMN_SPLIT_IMBALANCED,
 
   BLOCKS,
   SUB_BLOCKS,
