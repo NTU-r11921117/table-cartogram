@@ -8,9 +8,11 @@ import {Gon, Getter, LayoutType, Dimensions, SplitParams, LayoutParams, Optimiza
 import {layouts} from '../../src/layouts';
 import {XYPlot, LineSeries, XAxis, YAxis, DiscreteColorLegend} from 'react-vis';
 import EXAMPLES, { rowSplit } from './examples';
+import {CartogramMetrics} from './cartogram-metrics';
 
 type RunningMode = 'running' | 'finished' | 'converged' | 'stopped' | 'errored';
 import {COLOR_MODES} from '../../showcase/colors';
+import {calculateTotalRowLength, calculateTotalColumnLength, calculateTotalDiagonalLength, calculateMaxInnerAngle, calculateMinInnerAngle, calculateAverageShapeRatio, calculateAverageAspectRatio, calculateMaxAspectRatio, calculateTotalMinBoundingBox} from './cartogram-metrics-utils';
 
 const CONVERGENCE_THRESHOLD = 10;
 const CONVERGENCE_BARRIER = 0.0001;
@@ -141,7 +143,7 @@ function DisplayReadout(props: DisplayReadoutProps): JSX.Element {
   const {errorLog, error, maxError, endTime, startTime, stepsTaken} = props;
   return (
     <div className="flex-down">
-      <h5>COMPUTATION STATUS</h5>
+      <h4>COMPUTATION STATUS</h4>
       <div>
         {`Steps taken ${stepsTaken}`} <br />
         {`Avg Error ${Math.floor(error * Math.pow(10, 7)) / Math.pow(10, 5)} %`} <br />
@@ -211,6 +213,17 @@ export default function Playground(): JSX.Element {
     errorLog: [],
     errorStep: null,
   });
+  const [{totalRowLength, totalColumnLength, totalDiagonalLength, maxInnerAngle, minInnerAngle, averageShapeRatio, averageAspectRatio, maxAspectRatio, boundingBoxRatio}, setMetrics] = useState({
+    totalRowLength: 0,
+    totalColumnLength: 0,
+    totalDiagonalLength: 0,
+    maxInnerAngle: 0,
+    minInnerAngle: 0,
+    averageShapeRatio: 0,
+    averageAspectRatio: 0,
+    maxAspectRatio: 0,
+    boundingBoxRatio: 0,
+  });
   const triggerReRun = (...args: any): any => setRunningMode(`running-${Math.random()}` as RunningMode);
   useEffect(() => {
     if (!runningMode.includes('running')) {
@@ -247,6 +260,7 @@ export default function Playground(): JSX.Element {
         clearInterval(ticker);
         setRunningMode(converged ? 'converged' : halted ? 'stopped' : inError ? 'errored' : runningMode);
       }
+
       setScalars({
         startTime: localStartTime,
         endTime: new Date().getTime(),
@@ -256,6 +270,18 @@ export default function Playground(): JSX.Element {
         errorLog: localErrorLog,
         errorStep: null,
       });
+
+      setMetrics({
+        totalRowLength: calculateTotalRowLength(data, gons),
+        totalColumnLength: calculateTotalColumnLength(data, gons),
+        totalDiagonalLength: calculateTotalDiagonalLength(data, gons),
+        maxInnerAngle: calculateMaxInnerAngle(data, gons),
+        minInnerAngle: calculateMinInnerAngle(data, gons),
+        averageShapeRatio: calculateAverageShapeRatio(data, gons),
+        averageAspectRatio: calculateAverageAspectRatio(data, gons),
+        maxAspectRatio: calculateMaxAspectRatio(data, gons),
+        boundingBoxRatio: calculateTotalMinBoundingBox(data, gons),
+      });
     }, 100);
     return (): any => clearInterval(ticker);
   }, [runningMode, JSON.stringify(data), JSON.stringify(optimizationParams)]);
@@ -264,7 +290,7 @@ export default function Playground(): JSX.Element {
     <div className="flex" id="playground">
       <div className="flex">
         <div className="flex-down">
-          <h5>DATA SET SELECTION</h5>
+          <h4>DATA SET SELECTION</h4>
           <DropDownWithLabel
             label={'Predefined Datasets'}
             keys={Object.keys(EXAMPLES)}
@@ -294,7 +320,7 @@ export default function Playground(): JSX.Element {
             />
           </div>
           <button onClick={(): any => triggerReRun(setData(rowSplit(data, splitParams.splitRow, splitParams.splitRatio)))}>Split</button>
-          <h5>PARAM SELECTION</h5>
+          <h4>PARAM SELECTION</h4>
           <div className="flex-down">
             <DropDownWithLabel
               label={'Initial Layout'}
@@ -465,6 +491,8 @@ export default function Playground(): JSX.Element {
             <button onClick={(): any => setRunningMode('stopped')}>STOP</button>
             <button onClick={(): any => triggerReRun()}>{!gons.length ? 'START' : 'RESET'}</button>
           </div>
+        </div>
+        <div>
           <DisplayReadout
             errorLog={errorLog}
             error={error}
@@ -472,6 +500,17 @@ export default function Playground(): JSX.Element {
             endTime={endTime}
             startTime={startTime}
             stepsTaken={stepsTaken}
+          />
+          <CartogramMetrics
+            totalRowLength={totalRowLength}
+            totalColumnLength={totalColumnLength}
+            totalDiagonalLength={totalDiagonalLength}
+            maxInnerAngle={maxInnerAngle}
+            minInnerAngle={minInnerAngle}
+            averageShapeRatio={averageShapeRatio}
+            averageAspectRatio={averageAspectRatio}
+            maxAspectRatio={maxAspectRatio}
+            boundingBoxRatio={boundingBoxRatio}
           />
         </div>
         <div className="plot-container flex-down">
