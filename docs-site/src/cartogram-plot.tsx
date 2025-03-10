@@ -1,6 +1,7 @@
 import React from 'react';
+import {XYPlot, PolygonSeries, LabelSeries, MarkSeries} from 'react-vis';
 
-import {geoCenter} from '../../src/utils';
+import {geoCenter, getDiagonal, diagonalError, diagonalLength} from '../../src/utils';
 import {Dimensions, Pair} from '../../types';
 import {colorCell} from '../../showcase/colors';
 import {scaleLinear} from 'd3-scale';
@@ -42,6 +43,13 @@ export default function plot(props: Props): JSX.Element {
   const pather = line()
     .x((d: any) => xScale(d.x))
     .y((d: any) => yScale(d.y));
+  // console.log(data)
+  // const markedPoints = getDiagonal(data);
+  // console.log(markedPoints)
+  // const dE = diagonalError(data);
+  // console.log(dE)
+  // const dL = diagonalLength(data);
+  // console.log(dL)
   return (
     <svg height={height} width={width} xmlns="http://www.w3.org/2000/svg">
       {data.map((cell, index) => {
