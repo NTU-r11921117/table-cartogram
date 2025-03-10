@@ -212,7 +212,7 @@ const examples: {[x: string]: number[][]} = {
   NICE_CONFUSION,
   BASIC_CASE,
   IMBALENCED_CASE,
-  SPLIT_IMBALANCED,
+  // SPLIT_IMBALANCED,
   COLUMN_SPLIT_IMBALANCED,
 
   BLOCKS,

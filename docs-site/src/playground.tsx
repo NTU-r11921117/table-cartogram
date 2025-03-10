@@ -12,7 +12,7 @@ import {CartogramMetrics} from './cartogram-metrics';
 
 type RunningMode = 'running' | 'finished' | 'converged' | 'stopped' | 'errored';
 import {COLOR_MODES} from '../../showcase/colors';
-import {calculateTotalRowLength, calculateTotalColumnLength, calculateTotalDiagonalLength, calculateMaxInnerAngle, calculateMinInnerAngle, calculateAverageShapeRatio, calculateAverageAspectRatio, calculateMaxAspectRatio, calculateTotalMinBoundingBox} from './cartogram-metrics-utils';
+import {calculateTotalRowLength, calculateTotalColumnLength, calculateTotalDiagonalLength, calculateMaxInnerAngle, calculateMinInnerAngle, calculateAverageShapeRatio, calculateAverageAspectRatio, calculateMaxAspectRatio, calculateTotalMinBoundingBox, calculateConcaveCount} from './cartogram-metrics-utils';
 
 const CONVERGENCE_THRESHOLD = 10;
 const CONVERGENCE_BARRIER = 0.0001;
@@ -213,7 +213,7 @@ export default function Playground(): JSX.Element {
     errorLog: [],
     errorStep: null,
   });
-  const [{totalRowLength, totalColumnLength, totalDiagonalLength, maxInnerAngle, minInnerAngle, averageShapeRatio, averageAspectRatio, maxAspectRatio, boundingBoxRatio}, setMetrics] = useState({
+  const [{totalRowLength, totalColumnLength, totalDiagonalLength, maxInnerAngle, minInnerAngle, averageShapeRatio, averageAspectRatio, maxAspectRatio, boundingBoxRatio, concaveCount}, setMetrics] = useState({
     totalRowLength: 0,
     totalColumnLength: 0,
     totalDiagonalLength: 0,
@@ -223,6 +223,7 @@ export default function Playground(): JSX.Element {
     averageAspectRatio: 0,
     maxAspectRatio: 0,
     boundingBoxRatio: 0,
+    concaveCount: 0,
   });
   const triggerReRun = (...args: any): any => setRunningMode(`running-${Math.random()}` as RunningMode);
   useEffect(() => {
@@ -281,6 +282,7 @@ export default function Playground(): JSX.Element {
         averageAspectRatio: calculateAverageAspectRatio(data, gons),
         maxAspectRatio: calculateMaxAspectRatio(data, gons),
         boundingBoxRatio: calculateTotalMinBoundingBox(data, gons),
+        concaveCount: calculateConcaveCount(data, gons),
       });
     }, 100);
     return (): any => clearInterval(ticker);
@@ -511,6 +513,7 @@ export default function Playground(): JSX.Element {
             averageAspectRatio={averageAspectRatio}
             maxAspectRatio={maxAspectRatio}
             boundingBoxRatio={boundingBoxRatio}
+            concaveCount={concaveCount}
           />
         </div>
         <div className="plot-container flex-down">

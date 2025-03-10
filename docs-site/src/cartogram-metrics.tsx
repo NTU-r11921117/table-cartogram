@@ -10,6 +10,7 @@ export interface CartogramMetricsProps {
   averageAspectRatio?: number;
   maxAspectRatio?: number;
   boundingBoxRatio?: number;
+  concaveCount?: number;
 }
 
 export function CartogramMetrics(props: CartogramMetricsProps): JSX.Element {
@@ -23,6 +24,7 @@ export function CartogramMetrics(props: CartogramMetricsProps): JSX.Element {
     averageAspectRatio,
     maxAspectRatio,
     boundingBoxRatio,
+    concaveCount,
   } = props;
   return (
     <div className="flex-down">
@@ -37,6 +39,7 @@ export function CartogramMetrics(props: CartogramMetricsProps): JSX.Element {
         {`Average Aspect Ratio: ${averageAspectRatio}`} <br />
         {`Max Aspect Ratio: ${maxAspectRatio}`} <br />
         {`Bounding Box Ratio: ${boundingBoxRatio}`} <br />
+        {`Concave Count: ${concaveCount}`} <br />
       </div>
     </div>
   );

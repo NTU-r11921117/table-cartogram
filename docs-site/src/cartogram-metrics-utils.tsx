@@ -12,30 +12,36 @@ import {Vector, DataTable, Pos, Rect, PositionTable, Getter, Dimensions, Gon} fr
 
 const dist = (a: Pos, b: Pos): number => Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2));
 
+function calculateAngle(a: Pos, b: Pos, c: Pos): number {
+    const ux = a.x - b.x, uy = a.y - b.y;
+    const vx = c.x - b.x, vy = c.y - b.y;
+    return Math.atan2(ux * vy - uy * vx, ux * vx + uy * vy) * 180.0 / Math.PI;
+}
+
 // calculate the inner angle and find the largest one
 function maxAngleinGon(gon: Gon): number {
     let maxAngle = 0;
     for (let i = 0; i < 4; i++) {
-        let angle = Math.acos(
-            (dist(gon.vertices[i], gon.vertices[(i + 1) % 4]) ** 2 + dist(gon.vertices[i], gon.vertices[(i + 3) % 4]) ** 2 - dist(gon.vertices[(i + 1) % 4], gon.vertices[(i + 3) % 4]) ** 2) /
-            (2 * dist(gon.vertices[i], gon.vertices[(i + 1) % 4]) * dist(gon.vertices[i], gon.vertices[(i + 3) % 4]))
-        );
+        const a = gon.vertices[(i + 3) % 4];
+        const b = gon.vertices[i];
+        const c = gon.vertices[(i + 1) % 4];
+        let angle = (calculateAngle(a, b, c) + 360) % 360;
         maxAngle = Math.max(maxAngle, angle);
     }
-    return maxAngle * (180 / Math.PI);
+    return maxAngle;
 }
 
 // calculate the inner angle and find the smallest one
 function minAngleinGon(gon: Gon): number {
     let minAngle = 180;
     for (let i = 0; i < 4; i++) {
-        let angle = Math.acos(
-            (dist(gon.vertices[i], gon.vertices[(i + 1) % 4]) ** 2 + dist(gon.vertices[i], gon.vertices[(i + 3) % 4]) ** 2 - dist(gon.vertices[(i + 1) % 4], gon.vertices[(i + 3) % 4]) ** 2) /
-            (2 * dist(gon.vertices[i], gon.vertices[(i + 1) % 4]) * dist(gon.vertices[i], gon.vertices[(i + 3) % 4]))
-        );
+        const a = gon.vertices[(i + 3) % 4];
+        const b = gon.vertices[i];
+        const c = gon.vertices[(i + 1) % 4];
+        let angle = (calculateAngle(a, b, c) + 360) % 360;
         minAngle = Math.min(minAngle, angle);
     }
-    return minAngle * (180 / Math.PI);
+    return minAngle;
 }
 
 // calculate the aspect ratio of a gon
@@ -98,6 +104,11 @@ export function calculateTotalDiagonalLength(
     data: DataTable,
     gons: Gon[],
 ): number {
+    if (data.length !== data[0].length) {
+        console.error("The table is not square.");
+        return 0;
+    }
+
     let totalLength = 0;
 
     for (let i = 0; i < data.length; i++) {
@@ -147,8 +158,8 @@ export function calculateMinInnerAngle(
 export function calculateAverageShapeRatio(
     data: DataTable,
     gons: Gon[],
-): number {
-    let total
+): number{
+    return -1;
     let totalShapeRatio = 0;
     for (let i = 0; i < data.length; i++) {
         for (let j = 0; j < data[0].length; j++) {
@@ -195,15 +206,29 @@ export function calculateTotalMinBoundingBox(
     gons: Gon[],
 ): number {
     let minBoundingBox = 0;
-    console.log("--------------------");
     for (let i = 0; i < data.length; i++) {
         for (let j = 0; j < data[0].length; j++) {
             let width = Math.abs(Math.max(gons[i * data[0].length + j].vertices[2].x, gons[i * data[0].length + j].vertices[3].x) - Math.min(gons[i * data[0].length + j].vertices[0].x, gons[i * data[0].length + j].vertices[1].x));
             let height = Math.abs(Math.max(gons[i * data[0].length + j].vertices[1].y, gons[i * data[0].length + j].vertices[2].y) - Math.min(gons[i * data[0].length + j].vertices[0].y, gons[i * data[0].length + j].vertices[3].y));
             minBoundingBox += width * height;
-            console.log("Box: ", width * height);
         }
     }
-    console.log("minBoundingBox: ", minBoundingBox);
     return minBoundingBox;
+}
+
+export function calculateConcaveCount(
+    data: DataTable,
+    gons: Gon[],
+): number {
+    let concaveCount = 0;
+    for (let i = 0; i < data.length; i++) {
+        for (let j = 0; j < data[0].length; j++) {
+            const gon = gons[i * data[0].length + j];
+            let angle = maxAngleinGon(gon);
+            if (angle > 180) {
+                concaveCount++;
+            }
+        }
+    }
+    return concaveCount;
 }
