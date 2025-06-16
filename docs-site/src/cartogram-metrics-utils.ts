@@ -1,4 +1,4 @@
-import {Vector, DataTable, Pos, Rect, PositionTable, Getter, Dimensions, Gon} from '../../types.ts';
+import {Vector, DataTable, Pos, Rect, PositionTable, Getter, Dimensions, Gon} from '../../types';
 /**
  * Computes the average cartographic error for a particular table arrangement
  * @param  {Array of Arrays of Numbers} data The input table
@@ -66,10 +66,13 @@ function calculateShapeRatio(gon: Gon): number {
     return width / height;
 }
 
-export function calculateTotalRowLength(
+export function calculateAverageRowLength(
     data: DataTable,
     gons: Gon[],
 ): number {
+    if (data.length < 1) {
+        return 0;
+    }
     let totalLength = 0;
 
     for (let i = 1; i < data.length; i++) {
@@ -80,13 +83,16 @@ export function calculateTotalRowLength(
         }
     }
 
-    return totalLength;
+    return totalLength / (data.length - 1);
 }
 
-export function calculateTotalColumnLength(
+export function calculateAverageColumnLength(
     data: DataTable,
     gons: Gon[],
 ): number {
+    if (data[0].length < 1) {
+        return 0;
+    }
     let totalLength = 0;
 
     for (let i = 0; i < data.length; i++) {
@@ -97,7 +103,7 @@ export function calculateTotalColumnLength(
         }
     }
 
-    return totalLength;
+    return totalLength / (data[0].length - 1);
 }
 
 export function calculateTotalDiagonalLength(

@@ -434,3 +434,20 @@ export function diagonalLength(polygons: any[]) {
     console.error(error);
   }
 }
+
+export function calculateEdgesLength(polygons: any[]) {
+  try {
+    const totalDistance = (vertices: Pos[]) => { // Specify the type of the 'diagonal' parameter
+      let sum = 0;
+      for (let i = 1; i < vertices.length; i++) {
+        const dx = vertices[i].x - ((i == 1) ? vertices[i-1].x : 0); // Wrap the ternary expression in parentheses
+        const dy = vertices[i].y - ((i == 1) ? vertices[i-1].y : 0); // Wrap the ternary expression in parentheses
+        sum += Math.sqrt(dx * dx + dy * dy);
+      }
+      return sum;
+    };
+    return polygons.reduce((sum, polygon) => sum + totalDistance(polygon.vertices), 0); // Need code review
+  } catch (error) {
+    console.error(error);
+  }
+}

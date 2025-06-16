@@ -59,6 +59,15 @@ export default function plot(props: Props): JSX.Element {
         return (
           <g key={index}>
             <path d={pather(cell.vertices)} fill={color} stroke="#aaa" />
+            {cell.vertices.map((vertex: any, vIndex: number) => (
+              <circle
+                key={`vertex-${index}-${vIndex}`}
+                cx={xScale(vertex.x)}
+                cy={yScale(vertex.y)}
+                r={2}
+                fill="red"
+              />
+            ))}
             {showLabel && (
               <text x={xScale(center.x)} y={yScale(center.y)} fill={l < 0.5 ? 'white' : 'black'}>
                 {getLabel(cell)}

@@ -12,7 +12,8 @@ import {CartogramMetrics} from './cartogram-metrics';
 
 type RunningMode = 'running' | 'finished' | 'converged' | 'stopped' | 'errored';
 import {COLOR_MODES} from '../../showcase/colors';
-import {calculateTotalRowLength, calculateTotalColumnLength, calculateTotalDiagonalLength, calculateMaxInnerAngle, calculateMinInnerAngle, calculateAverageShapeRatio, calculateAverageAspectRatio, calculateMaxAspectRatio, calculateTotalMinBoundingBox, calculateConcaveCount} from './cartogram-metrics-utils';
+import {calculateAverageRowLength, calculateAverageColumnLength, calculateTotalDiagonalLength, calculateMaxInnerAngle, calculateMinInnerAngle, calculateAverageShapeRatio, calculateAverageAspectRatio, calculateMaxAspectRatio, calculateTotalMinBoundingBox, calculateConcaveCount} from './cartogram-metrics-utils';
+import { tableCartogram } from 'table-cartogram';
 
 const CONVERGENCE_THRESHOLD = 10;
 const CONVERGENCE_BARRIER = 0.0001;
@@ -213,9 +214,9 @@ export default function Playground(): JSX.Element {
     errorLog: [],
     errorStep: null,
   });
-  const [{totalRowLength, totalColumnLength, totalDiagonalLength, maxInnerAngle, minInnerAngle, averageShapeRatio, averageAspectRatio, maxAspectRatio, boundingBoxRatio, concaveCount}, setMetrics] = useState({
-    totalRowLength: 0,
-    totalColumnLength: 0,
+  const [{averageRowLength, averageColumnLength, totalDiagonalLength, maxInnerAngle, minInnerAngle, averageShapeRatio, averageAspectRatio, maxAspectRatio, boundingBoxRatio, concaveCount}, setMetrics] = useState({
+    averageRowLength: 0,
+    averageColumnLength: 0,
     totalDiagonalLength: 0,
     maxInnerAngle: 0,
     minInnerAngle: 0,
@@ -273,8 +274,8 @@ export default function Playground(): JSX.Element {
       });
 
       setMetrics({
-        totalRowLength: calculateTotalRowLength(data, gons),
-        totalColumnLength: calculateTotalColumnLength(data, gons),
+        averageRowLength: calculateAverageRowLength(data, gons),
+        averageColumnLength: calculateAverageColumnLength(data, gons),
         totalDiagonalLength: calculateTotalDiagonalLength(data, gons),
         maxInnerAngle: calculateMaxInnerAngle(data, gons),
         minInnerAngle: calculateMinInnerAngle(data, gons),
@@ -504,8 +505,8 @@ export default function Playground(): JSX.Element {
             stepsTaken={stepsTaken}
           />
           <CartogramMetrics
-            totalRowLength={totalRowLength}
-            totalColumnLength={totalColumnLength}
+            averageRowLength={averageRowLength}
+            averageColumnLength={averageColumnLength}
             totalDiagonalLength={totalDiagonalLength}
             maxInnerAngle={maxInnerAngle}
             minInnerAngle={minInnerAngle}

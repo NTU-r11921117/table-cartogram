@@ -1,8 +1,8 @@
 import React from "react";
 
 export interface CartogramMetricsProps {
-  totalRowLength?: number;
-  totalColumnLength?: number;
+  averageRowLength?: number;
+  averageColumnLength?: number;
   totalDiagonalLength?: number;
   maxInnerAngle?: number;
   minInnerAngle?: number;
@@ -15,8 +15,8 @@ export interface CartogramMetricsProps {
 
 export function CartogramMetrics(props: CartogramMetricsProps): JSX.Element {
   const {
-    totalRowLength,
-    totalColumnLength,
+    averageRowLength,
+    averageColumnLength,
     totalDiagonalLength,
     maxInnerAngle,
     minInnerAngle,
@@ -30,8 +30,8 @@ export function CartogramMetrics(props: CartogramMetricsProps): JSX.Element {
     <div className="flex-down">
       <h4>Cartogram Metrics</h4>
       <div>
-        {`Total Row Length: ${totalRowLength}`} <br />
-        {`Total Column Length: ${totalColumnLength}`} <br />
+        {`Average Row Length: ${averageRowLength}`} <br />
+        {`Average Column Length: ${averageColumnLength}`} <br />
         {`Total Diagonal Length: ${totalDiagonalLength}`} <br />
         {`Max Inner Angle: ${maxInnerAngle}`} <br />
         {`Min Inner Angle: ${minInnerAngle}`} <br />
