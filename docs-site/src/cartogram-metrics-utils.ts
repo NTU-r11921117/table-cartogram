@@ -56,7 +56,7 @@ function calculateAspectRatio(gon: Gon): number {
         maxEdge = Math.max(maxEdge, edge);
     }
     
-    return minEdge / maxEdge;
+    return parseFloat((minEdge / maxEdge).toFixed(5));
 }
 
 // calculate the aspect ratio of a gon
@@ -83,7 +83,7 @@ export function calculateAverageRowLength(
         }
     }
 
-    return totalLength / (data.length - 1);
+    return parseFloat((totalLength / (data.length - 1)).toFixed(5));
 }
 
 export function calculateAverageColumnLength(
@@ -103,7 +103,7 @@ export function calculateAverageColumnLength(
         }
     }
 
-    return totalLength / (data[0].length - 1);
+    return parseFloat((totalLength / (data[0].length - 1)).toFixed(5));
 }
 
 export function calculateTotalDiagonalLength(
@@ -119,7 +119,7 @@ export function calculateTotalDiagonalLength(
 
     for (let i = 0; i < data.length; i++) {
       const gon = gons[i * data[0].length + i];
-      let diagonal = dist(gon.vertices[0], gon.vertices[2]);
+    let diagonal = parseFloat(dist(gon.vertices[0], gon.vertices[2]).toFixed(5));
       totalLength += diagonal;
     }
 
@@ -140,7 +140,7 @@ export function calculateMaxInnerAngle(
         }
     }
 
-    return maxAngle;
+    return parseFloat(maxAngle.toFixed(5));
 }
 
 export function calculateMinInnerAngle(
@@ -157,7 +157,32 @@ export function calculateMinInnerAngle(
         }
     }
 
-    return minAngle;
+    return parseFloat(minAngle.toFixed(5));
+}
+
+export function calculateRMSEInnerAngleRatio(
+    data: DataTable,
+    gons: Gon[],
+): number {
+    let totalError = 0;
+    let count = 0;
+    const IDEAL_RATIO = 1;
+
+    for (let i = 0; i < data.length; i++) {
+        for (let j = 0; j < data[0].length; j++) {
+            const gon = gons[i * data[0].length + j];
+            let maxAngle = maxAngleinGon(gon);
+            let minAngle = minAngleinGon(gon);
+            if (minAngle === 0 || maxAngle === 0) {
+                continue; // Avoid division by zero
+            }
+            let ratio = minAngle / maxAngle;
+            totalError += Math.pow(ratio - IDEAL_RATIO, 2);
+            count++;
+        }
+    }
+
+    return count > 0 ? parseFloat(Math.sqrt(totalError / count).toFixed(5)) : 0;
 }
 
 //  width-to-height ratio
@@ -189,7 +214,7 @@ export function calculateAverageAspectRatio(
             totalAspectRatio += aspectRatio;
         }
     }
-    return totalAspectRatio / (data.length * data[0].length);
+    return parseFloat((totalAspectRatio / (data.length * data[0].length)).toFixed(5));
 }
 
 export function calculateMaxAspectRatio(
@@ -219,7 +244,7 @@ export function calculateTotalMinBoundingBox(
             minBoundingBox += width * height;
         }
     }
-    return minBoundingBox;
+    return parseFloat(minBoundingBox.toFixed(5));
 }
 
 export function calculateConcaveCount(

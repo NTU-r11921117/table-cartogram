@@ -12,8 +12,8 @@ import {CartogramMetrics} from './cartogram-metrics';
 
 type RunningMode = 'running' | 'finished' | 'converged' | 'stopped' | 'errored';
 import {COLOR_MODES} from '../../showcase/colors';
-import {calculateAverageRowLength, calculateAverageColumnLength, calculateTotalDiagonalLength, calculateMaxInnerAngle, calculateMinInnerAngle, calculateAverageShapeRatio, calculateAverageAspectRatio, calculateMaxAspectRatio, calculateTotalMinBoundingBox, calculateConcaveCount} from './cartogram-metrics-utils';
 import { tableCartogram } from 'table-cartogram';
+import {calculateAverageRowLength, calculateAverageColumnLength, calculateTotalDiagonalLength, calculateMaxInnerAngle, calculateMinInnerAngle, calculateRMSEInnerAngleRatio, calculateAverageShapeRatio, calculateAverageAspectRatio, calculateMaxAspectRatio, calculateTotalMinBoundingBox, calculateConcaveCount} from './cartogram-metrics-utils';
 
 const CONVERGENCE_THRESHOLD = 10;
 const CONVERGENCE_BARRIER = 0.0001;
@@ -214,12 +214,13 @@ export default function Playground(): JSX.Element {
     errorLog: [],
     errorStep: null,
   });
-  const [{averageRowLength, averageColumnLength, totalDiagonalLength, maxInnerAngle, minInnerAngle, averageShapeRatio, averageAspectRatio, maxAspectRatio, boundingBoxRatio, concaveCount}, setMetrics] = useState({
+  const [{averageRowLength, averageColumnLength, totalDiagonalLength, maxInnerAngle, minInnerAngle, rmseInnerAngleRatio, averageShapeRatio, averageAspectRatio, maxAspectRatio, boundingBoxRatio, concaveCount}, setMetrics] = useState({
     averageRowLength: 0,
     averageColumnLength: 0,
     totalDiagonalLength: 0,
     maxInnerAngle: 0,
     minInnerAngle: 0,
+    rmseInnerAngleRatio: 0,
     averageShapeRatio: 0,
     averageAspectRatio: 0,
     maxAspectRatio: 0,
@@ -279,6 +280,7 @@ export default function Playground(): JSX.Element {
         totalDiagonalLength: calculateTotalDiagonalLength(data, gons),
         maxInnerAngle: calculateMaxInnerAngle(data, gons),
         minInnerAngle: calculateMinInnerAngle(data, gons),
+        rmseInnerAngleRatio: calculateRMSEInnerAngleRatio(data, gons),
         averageShapeRatio: calculateAverageShapeRatio(data, gons),
         averageAspectRatio: calculateAverageAspectRatio(data, gons),
         maxAspectRatio: calculateMaxAspectRatio(data, gons),
@@ -510,6 +512,7 @@ export default function Playground(): JSX.Element {
             totalDiagonalLength={totalDiagonalLength}
             maxInnerAngle={maxInnerAngle}
             minInnerAngle={minInnerAngle}
+            rmseInnerAngleRatio={rmseInnerAngleRatio}
             averageShapeRatio={averageShapeRatio}
             averageAspectRatio={averageAspectRatio}
             maxAspectRatio={maxAspectRatio}

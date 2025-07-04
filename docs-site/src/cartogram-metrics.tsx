@@ -6,6 +6,7 @@ export interface CartogramMetricsProps {
   totalDiagonalLength?: number;
   maxInnerAngle?: number;
   minInnerAngle?: number;
+  rmseInnerAngleRatio?: number;
   averageShapeRatio?: number;
   averageAspectRatio?: number;
   maxAspectRatio?: number;
@@ -20,6 +21,7 @@ export function CartogramMetrics(props: CartogramMetricsProps): JSX.Element {
     totalDiagonalLength,
     maxInnerAngle,
     minInnerAngle,
+    rmseInnerAngleRatio,
     averageShapeRatio,
     averageAspectRatio,
     maxAspectRatio,
@@ -35,6 +37,9 @@ export function CartogramMetrics(props: CartogramMetricsProps): JSX.Element {
         {`Total Diagonal Length: ${totalDiagonalLength}`} <br />
         {`Max Inner Angle: ${maxInnerAngle}`} <br />
         {`Min Inner Angle: ${minInnerAngle}`} <br />
+        {`Inner Angle Ratio(max/min): ${(maxInnerAngle && minInnerAngle) ? (maxInnerAngle / minInnerAngle).toFixed(5) : "N/A"}`}<br />
+        {`Inner Angle Ratio(min/max): ${(minInnerAngle && maxInnerAngle) ? (minInnerAngle / maxInnerAngle).toFixed(5) : "N/A"}`}<br />
+        {`RMSE Inner Angle Ratio: ${rmseInnerAngleRatio}`} <br />
         {`Average Shape Ratio: ${averageShapeRatio}`} <br />
         {`Average Aspect Ratio: ${averageAspectRatio}`} <br />
         {`Max Aspect Ratio: ${maxAspectRatio}`} <br />
