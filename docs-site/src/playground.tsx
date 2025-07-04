@@ -12,8 +12,19 @@ import {CartogramMetrics} from './cartogram-metrics';
 
 type RunningMode = 'running' | 'finished' | 'converged' | 'stopped' | 'errored';
 import {COLOR_MODES} from '../../showcase/colors';
-import { tableCartogram } from 'table-cartogram';
-import {calculateAverageRowLength, calculateAverageColumnLength, calculateTotalDiagonalLength, calculateMaxInnerAngle, calculateMinInnerAngle, calculateRMSEInnerAngleRatio, calculateAverageShapeRatio, calculateAverageAspectRatio, calculateMaxAspectRatio, calculateTotalMinBoundingBox, calculateConcaveCount} from './cartogram-metrics-utils';
+import {
+  calculateAverageRowLength,
+  calculateAverageColumnLength,
+  calculateTotalDiagonalLength,
+  calculateMaxInnerAngle,
+  calculateMinInnerAngle,
+  calculateRMSEInnerAngleRatio,
+  calculateAverageShapeRatio,
+  calculateAverageAspectRatio,
+  calculateMaxAspectRatio,
+  calculateTotalMinBoundingBox,
+  calculateConcaveCount,
+} from './cartogram-metrics-utils';
 
 const CONVERGENCE_THRESHOLD = 10;
 const CONVERGENCE_BARRIER = 0.0001;
