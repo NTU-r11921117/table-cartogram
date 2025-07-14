@@ -15,6 +15,8 @@ import {
   translateTableToVector,
   getIndicesInVectorOfInterest,
   phaseShuffle,
+  computeErrorsBylocalTable,
+  prepareRects,
 } from './utils';
 import {norm2, finiteDiferenceForIndices} from './math';
 import {buildErrorGradient} from './grad-penal';
@@ -141,9 +143,22 @@ export function descent(
   if (!iterations) {
     return translateVectorToTable(candidateVector, table, dims.height, dims.width);
   }
+  const CONVERGENCE_BARRIER = 0.0001;
   const currentVec = candidateVector.slice();
+  
   for (let i = 0; i < iterations; i++) {
     descentInnerLoop(objFunc, currentVec, table, dims, optimizationParams);
+    if (optimizationParams.earlyStopInFixedStep) {
+      if (i % 10 === 0) {
+        const currentTable = translateVectorToTable(currentVec, table, dims.height, dims.width);
+        const gons = prepareRects(currentTable, table, (x: any) => x);
+        const errorCompute = computeErrorsBylocalTable(table, gons, dims);
+        if (errorCompute.error < CONVERGENCE_BARRIER) {
+          break;
+        }
+      }
+    }
+    
   }
   return translateVectorToTable(currentVec, table, dims.height, dims.width);
 }

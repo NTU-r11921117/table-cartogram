@@ -39,6 +39,7 @@ export interface OptimizationParams {
   lineSearchSteps?: number;
   useEvans?: boolean;
   showLabel?: boolean;
+  earlyStopInFixedStep?: boolean;
 }
 
 export interface LayoutParams {

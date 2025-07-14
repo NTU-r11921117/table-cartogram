@@ -301,6 +301,33 @@ export function computeErrors(
   };
 }
 
+export function computeErrorsBylocalTable(
+  data: DataTable,
+  gons: Gon[],
+  dims: Dimensions,
+): {error: number; maxError: number} {
+  const tableSum = data.reduce((acc, row) => acc + row.reduce((sum, cell) => sum + cell, 0), 0);
+  let maxError = -Infinity;
+  let sumError = 0;
+  for (let i = 0; i < data.length; i++) {
+    for (let j = 0; j < data[0].length; j++) {
+      const gonArea = area(gons[i * data[0].length + j].vertices);
+      const expectedArea = data[i][j] / tableSum;
+      const computedArea = gonArea / (dims.height * dims.width);
+      const computedErr = Math.abs(computedArea - expectedArea) / Math.max(computedArea, expectedArea);
+      sumError += computedErr;
+      if (maxError < computedErr) {
+        maxError = computedErr;
+      }
+    }
+  }
+
+  return {
+    error: sumError / (data.length * data[0].length),
+    maxError,
+  };
+}
+
 /**
  * Shuffles array in place.
  * @param {Array} a items An array containing the items.
