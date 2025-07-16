@@ -149,7 +149,7 @@ export function descent(
   for (let i = 0; i < iterations; i++) {
     descentInnerLoop(objFunc, currentVec, table, dims, optimizationParams);
     if (optimizationParams.earlyStopInFixedStep) {
-      if (i % 10 === 0) {
+      if (i % 10 === 0 && i > 0) {
         const currentTable = translateVectorToTable(currentVec, table, dims.height, dims.width);
         const gons = prepareRects(currentTable, table, (x: any) => x);
         const errorCompute = computeErrorsBylocalTable(table, gons, dims);
